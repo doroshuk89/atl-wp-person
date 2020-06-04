@@ -14,9 +14,8 @@ services:
       WORDPRESS_DB_NAME: exampledb
     volumes:
       - wordpress:/var/www/html
-      - ./atlas/:/var/www/html/wp-content/themes/atlas/
-      - ./dsp/:/var/www/html/wp-content/plugins/atl-dsp/
-      - ./person/:/var/www/html/wp-content/plugins/person/	
+      - ./dsp/:/var/www/html/wp-content/plugins/dsp/
+      - ./person/:/var/www/html/wp-content/plugins/person/
   db:
     image: mysql:5.7
     restart: always
