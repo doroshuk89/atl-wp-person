@@ -29,12 +29,13 @@ function teamperson()
         'capability_type' => 'post',
         'has_archive' => true,
         'hierarchical' => false,
-        'menu_icon' => get_stylesheet_directory_uri() .'/img/function_icon.png', // иконка в меню
+        'menu_icon' => plugin_dir_url(__DIR__) .'assets/img/plugins-icons.png', // иконка в меню
         'menu_position' => 40, //позиция в меню
-        'supports' => array('title','editor','thumbnail', 'comments', 'author', 'custom-fields'),
+        'supports' => array('title','editor','thumbnail', 'comments', 'author', 'custom-fields', 'excerpt'),
         'taxonomies' => array('team', 'post_tag', 'category')
     );
     register_post_type('teamperson', $args);
+
 }
 
 

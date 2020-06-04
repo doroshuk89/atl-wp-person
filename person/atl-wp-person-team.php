@@ -12,5 +12,12 @@ Author URI: http://atlas-it.by
 require_once __DIR__.'/inc/atl-wp-create-post-type.php';
 /*Create taxonomy Team*/
 require_once __DIR__.'/inc/atl-wp-create-taxomony-team.php';
+/*Class Create Metabox*/
+require_once __DIR__.'/classes/CreateMetabox.php';
 
+/*Add metadata Phone, Address, Email*/
+$options = require_once __DIR__.'/config/metabox.php';
+foreach ($options as $option) {
+    new CreateMetabox($option);
+}
 ?>
