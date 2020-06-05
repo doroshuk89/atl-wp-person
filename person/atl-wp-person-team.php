@@ -8,16 +8,16 @@ Author: Atlas
 Author URI: http://atlas-it.by
 */
 
-/*Create Post type TeamPearson*/
-require_once __DIR__.'/inc/atl-wp-create-post-type.php';
-/*Create taxonomy Team*/
-require_once __DIR__.'/inc/atl-wp-create-taxomony-team.php';
-/*Class Create Metabox*/
-require_once __DIR__.'/classes/CreateMetabox.php';
+define('ANBLOG_TEST_DIR', plugin_dir_path(__FILE__));     //полный путь к корню папки плагина (от сервера)
+define('ANBLOG_TEST_URL', plugin_dir_url(__FILE__));      //путь к корню папки плагина (лучше его использовать)
 
+/*file functions*/
+require_once __DIR__ . '/includes/functions.php';
 /*Add metadata Phone, Address, Email*/
-$options = require_once __DIR__.'/config/metabox.php';
-foreach ($options as $option) {
-    new CreateMetabox($option);
-}
+require_once __DIR__.'/classes/CreateMetabox.php';
+    $options = require_once __DIR__.'/config/metabox.php';
+        foreach ($options as $option)
+            {
+                new CreateMetabox($option);
+            }
 ?>
