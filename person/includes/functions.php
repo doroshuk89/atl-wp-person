@@ -26,7 +26,7 @@ function teamperson()
         'show_ui' => true,
         'show_in_menu' => true,
         'query_var' => false,
-        'rewrite' => array('slug' =>'teams', 'with_front' => false ),
+        'rewrite' => array('slug' =>'person', 'with_front' => false ),
         'capability_type' => 'post',
         'has_archive' => true,
         'hierarchical' => false,
