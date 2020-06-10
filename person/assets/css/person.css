@@ -1,0 +1,21 @@
+.wrap-person {
+    margin: 60px;
+}
+.person {
+    margin-top: 60px;
+    margin-bottom: 60px;
+    padding: 40px;
+}
+.left{
+    text-align: left;
+}
+.right {
+    float: right;
+    text-align: right !important;
+}
+.center-person {
+    text-align: center;
+}
+.mt-20 {
+    margin-top: 60px;
+}
