@@ -30,7 +30,7 @@ function teamperson()
         'capability_type' => 'post',
         'has_archive' => true,
         'hierarchical' => false,
-        'menu_icon' => ANBLOG_TEST_URL .'assets/img/plugins-icons.png', // иконка в меню
+        'menu_icon' => ANBLOG_TEST_URL .'assets/img/plugins-icon.png', // иконка в меню
         'menu_position' => 40, //позиция в меню
         'supports' => array('title','editor','thumbnail', 'comments'),
         'taxonomies' => array('team')
@@ -87,4 +87,14 @@ add_filter( 'comment_form_default_fields', 'comment_form_default_add_my_fields' 
 function comment_form_default_add_my_fields( $fields ) {
         unset( $fields['url'] );
     return $fields;
+}
+
+// apply_filters( 'get_comment_link', $link, $comment, $args, $cpage );
+add_filter( 'get_comment_link', 'change_redirect_link', 10, 4 );
+function change_redirect_link( $link, $comment, $args, $cpage ){
+    if( false !== strpos($_SERVER['REQUEST_URI'], 'wp-comments-post.php') ){
+        // изменяем номер страницы комментариев
+        $link = str_replace( "comment-page-$cpage", "comment-page-1", $link );
+    }
+    return $link;
 }
