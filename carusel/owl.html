@@ -1,0 +1,55 @@
+
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/owl.carousel.min.css">
+        <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    </head>
+    <body>
+        <div class="owl-carousel">
+            <div> <img src="images/1.jpg"> </div>
+                <div> <img src="images/2.jpg"> </div>
+                <div> <img src="images/3.jpg"> </div>
+                <div><img src="images/4.jpg"></div>
+                <div><img src="images/5.jpg"></div>
+                <div> <img src="images/6.jpg"></div>
+                <div><img src="images/7.jpg"> </div>
+                <div> <img src="images/2.jpg"> </div>
+                <div> <img src="images/3.jpg"> </div>
+                <div><img src="images/4.jpg"></div>
+                <div><img src="images/5.jpg"></div>
+                <div> <img src="images/6.jpg"></div>
+                <div><img src="images/7.jpg"> </div>
+        </div>
+        
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script>
+                $(document).ready(function(){
+                    $(".owl-carousel").owlCarousel({
+                loop:true, //Зацикливаем слайдер
+                margin:50, //Отступ от элемента справа в 50px
+                nav:true, //Отключение навигации
+                autoplay:true, //Автозапуск слайдера
+                autoHeight:false,
+                smartSpeed:1000, //Время движения слайда
+                autoplayTimeout:2000, //Время смены слайда
+                responsive:{ //Адаптивность. Кол-во выводимых элементов при определенной ширине.
+                    0:{
+                        items:1
+                    },
+                    600:{
+                        items:2
+                    },
+                    1000:{
+                        items:4
+                    }
+                }
+            });
+
+                });
+        </script>
+    </body>
+</html>
