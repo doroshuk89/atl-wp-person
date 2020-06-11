@@ -5,6 +5,7 @@ services:
   wordpress:
     image: wordpress
     restart: always
+    container_name: wp
     ports:
       - 8000:80
     environment:
@@ -13,11 +14,16 @@ services:
       WORDPRESS_DB_PASSWORD: examplepass
       WORDPRESS_DB_NAME: exampledb
     volumes:
+      - ./dsp/:/var/www/html/wp-content/plugins/atl-dsp/
       - wordpress:/var/www/html
-      - ./dsp/:/var/www/html/wp-content/plugins/dsp/
       - ./person/:/var/www/html/wp-content/plugins/person/
+    depends_on:
+        - db
+    networks:
+      - project
   db:
     image: mysql:5.7
+    container_name: mysql
     restart: always
     environment:
       MYSQL_DATABASE: exampledb
@@ -26,6 +32,12 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - db:/var/lib/mysql
+    networks:
+      - project
+
+networks:
+  project:
+    driver: bridge
 
 volumes:
   wordpress:
