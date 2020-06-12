@@ -35,4 +35,12 @@ function include_template_function( $template_path ) {
     }
     return $template_path;
 }
+
+/*register widget*/
+require_once ANBLOG_TEST_DIR.'widget/person-carusel-widget.php';
+add_action('widgets_init', 'atl_wp_person_widget');
+function atl_wp_person_widget ()
+    {
+        register_widget('ATL_PERSON_CARUSEL');
+    }
 ?>

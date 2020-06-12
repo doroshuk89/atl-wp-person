@@ -69,7 +69,6 @@ function create_team_taxonomies(){
         )
     );
 }
-
 /*include styles*/
 add_action( 'wp_enqueue_scripts', 'person_register_styles' );
 function person_register_styles () {
@@ -81,14 +80,12 @@ function person_register_styles () {
 
         }
 }
-
 /*delete inpit website from commetns form*/
 add_filter( 'comment_form_default_fields', 'comment_form_default_add_my_fields' );
 function comment_form_default_add_my_fields( $fields ) {
         unset( $fields['url'] );
     return $fields;
 }
-
 // apply_filters( 'get_comment_link', $link, $comment, $args, $cpage );
 add_filter( 'get_comment_link', 'change_redirect_link', 10, 4 );
 function change_redirect_link( $link, $comment, $args, $cpage ){
