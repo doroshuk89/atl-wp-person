@@ -95,3 +95,5 @@ function change_redirect_link( $link, $comment, $args, $cpage ){
     }
     return $link;
 }
+
+
