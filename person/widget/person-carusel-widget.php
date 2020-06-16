@@ -15,7 +15,7 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
 
     public function form ($instance) {
 
-        $title = isset($instance['title'])?$instance['title']:'PersonTime';
+        $title = isset($instance['title'])?$instance['title']:'PersonTeam';
         $time_autoscroll = isset($instance['time_autoscroll']) ? $instance['time_autoscroll']:'1000';
         ?>
         <p>
@@ -79,7 +79,7 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
                                 ]
                 ];
         $PersonTeam = get_posts($params);
-        /*Вывод списка дочерних страниц*/
+        
         echo $args['before_widget'];
         echo $args['before_title'].$instance['title'].$args['after_title']; ?>
                     <div class="owl-carousel slide-two">
