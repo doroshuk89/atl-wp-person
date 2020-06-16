@@ -2,6 +2,9 @@
 
 class ATL_PERSON_CARUSEL extends WP_Widget {
 
+    public $min_time = 1000;
+    public $max_time = 10000;
+
     public function __construct() {
         $args = array (
             'name'=>'PersonCarusel',
@@ -12,7 +15,6 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
 
     public function form ($instance) {
 
-        print_r($instance);
         $title = isset($instance['title'])?$instance['title']:'PersonTime';
         $time_autoscroll = isset($instance['time_autoscroll']) ? $instance['time_autoscroll']:'1000';
         ?>
@@ -21,7 +23,7 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
             <input class="widefat title" id="<?php echo $this->get_field_id('title');?>" name="<?php echo $this->get_field_name('title');?>" value="<?php echo $title;?>">
         </p>
         <p>
-            <label for = "<?php echo $this->get_field_id('time_autoscroll');?>">Время автоскролла</label>
+            <label for = "<?php echo $this->get_field_id('time_autoscroll');?>">Время автоскролла (мс от 1000 - 10000)</label>
             <input class="widefat title" id="<?php echo $this->get_field_id('time_autoscroll');?>" name="<?php echo $this->get_field_name('time_autoscroll');?>" value="<?php echo $time_autoscroll;?>">
         </p>
 
@@ -33,7 +35,6 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
                                         'taxonomy' => 'team'
                                     ]
             )) {
-                    //print_r($terms);
                     foreach ($terms as $key=>$term) {
                         if(isset($instance['dep']) && is_array($instance['dep']) ) {
                             if(in_array($term->term_id, $instance['dep'])){
@@ -58,8 +59,13 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
 
         /*add Styles and Scripts for view carusel in front*/
         if ( is_active_widget(false, false, $this->id_base, true) ) {
-                wp_enqueue_script('truescript', ANBLOG_TEST_URL. 'truescript.js');
-                wp_localize_script('truescript', 'carusel', array('time' => $instance['time_autoscroll']));
+            $theme_version = wp_get_theme()->get( 'Version' );
+                wp_enqueue_style('owl-carusel-theme',   ANBLOG_TEST_URL. 'assets/css/owl.theme.default.min.css',array(), $theme_version);
+                wp_enqueue_style('owl-carusel',         ANBLOG_TEST_URL. 'assets/css/owl.carousel.min.css', array(), $theme_version);
+                wp_enqueue_style('owl-carusel-person',  ANBLOG_TEST_URL. 'assets/css/owl-person.css',array(), $theme_version);
+                wp_enqueue_script('owl-carusel-js',     ANBLOG_TEST_URL. 'assets/js/owl.carousel.min.js', array('jquery'), null, true);
+                wp_enqueue_script('atl-wp-carusel',     ANBLOG_TEST_URL. 'assets/js/atl-wp-carusel.js', array('jquery'), null, true);
+                wp_localize_script('atl-wp-carusel', 'carusel_widget', array('time_autoscroll' => $instance['time_autoscroll']));
         }
 
         $params = [
@@ -73,24 +79,37 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
                                 ]
                 ];
         $PersonTeam = get_posts($params);
-        //print_r($PersonTeam);
         /*Вывод списка дочерних страниц*/
         echo $args['before_widget'];
         echo $args['before_title'].$instance['title'].$args['after_title']; ?>
-            <ul>
-                <?php foreach ($PersonTeam as $item) { ?>
-                        <li><a href="<?php echo get_permalink($item->ID);?>"> <?php echo $item->post_title; echo  get_the_post_thumbnail( $item->ID );?></a></li>
-                   <?php } ?>
-            </ul>
+                    <div class="owl-carousel slide-two">
+                        <?php foreach ($PersonTeam as $item) { ?>
+                            <div class="item-carousel">
+                                        <a href="<?php echo get_permalink($item->ID);?>">
+                                            <?php echo $item->post_title; echo  get_the_post_thumbnail( $item->ID );?>
+                                        </a>
+                            </div>
+                        <?php } ?>
+                    </div>
+
         <?php echo $args['after_widget'];
     }
 
     public function update ($new_instance, $old_instance) {
-            $new_instance['title']=isset($new_instance['title']) && !empty($new_instance['title'])?strip_tags($new_instance['title']):'PersonTime';
-            $new_instance['time_autoscroll']=isset($new_instance['time_autoscroll']) && !empty($new_instance['time_autoscroll'])?strip_tags($new_instance['time_autoscroll']):'1000';
-            if (!isset($new_instance['dep']) && !is_array($new_instance['dep'])){
-                $new_instance['dep'] = array();
-            }
+        $new_instance['title']=isset($new_instance['title']) && !empty($new_instance['title'])?strip_tags($new_instance['title']):'PersonTeam';
+        $new_instance['time_autoscroll']=isset($new_instance['time_autoscroll']) && !empty($new_instance['time_autoscroll'])?$this->range_time_scroll(strip_tags($new_instance['time_autoscroll'])):'1000';
+                if (!isset($new_instance['dep']) && !is_array($new_instance['dep'])){
+                    $new_instance['dep'] = array();
+                }
         return $new_instance;
+    }
+
+    protected function range_time_scroll ($time) {
+            if ($time < $this->min_time) {
+                $time = $this->min_time;
+            }elseif ($time > $this->max_time) {
+                $time = $this->max_time;
+            }
+        return $time;
     }
 }

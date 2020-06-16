@@ -76,8 +76,6 @@ function person_register_styles () {
         {
             wp_enqueue_style('bootstrap-person', ANBLOG_TEST_URL.'assets/css/person-bootstrap-grid.min.css' ,array(),null);
             wp_enqueue_style('person', ANBLOG_TEST_URL.'assets/css/person.css' ,array(),null);
-            wp_enqueue_style('icons2', ANBLOG_TEST_URL.'assets/css/icons2.css' ,array(),null);
-
         }
 }
 /*delete inpit website from commetns form*/
