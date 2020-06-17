@@ -18,7 +18,8 @@ class CreateMetabox {
         global $post; $p_i_d = $post->ID;
         wp_nonce_field( $this->options['id'], $this->options['id'].'_wpnonce', false, true );
         ?>
-        <table class="form-table"><tbody><?php
+
+        <table class="form-table" ><tbody><?php
         foreach ( $this->options['args'] as $param ) {
             if (current_user_can( $param['cap'])) {
                 ?><tr><?php
@@ -28,6 +29,15 @@ class CreateMetabox {
                         <th scope="row"><label for="<?php echo $this->prefix .$param['id'] ?>"><?php echo $param['title'] ?></label></th>
                         <td>
                             <input name="<?php echo $this->prefix .$param['id'] ?>" type="<?php echo $param['type'] ?>" id="<?php echo $this->prefix .$param['id'] ?>" value="<?php echo $value ?>" placeholder="<?php echo $param['placeholder'] ?>" class="regular-text" /><br />
+                            <span class="description"><?php echo $param['desc'] ?></span>
+                        </td>
+                        <?php
+                        break;
+                    }
+                    case 'number':{ ?>
+                        <th scope="row"><label for="<?php echo $this->prefix .$param['id'] ?>"><?php echo $param['title'] ?></label></th>
+                        <td>
+                            <input name="<?php echo $this->prefix .$param['id'] ?>" type="<?php echo $param['type'] ?>" id="<?php echo $this->prefix .$param['id'] ?>" value="<?php echo $value ?>" placeholder="<?php echo $param['placeholder'] ?>"  style="width: 100%;"/><br />
                             <span class="description"><?php echo $param['desc'] ?></span>
                         </td>
                         <?php

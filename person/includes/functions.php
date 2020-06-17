@@ -136,16 +136,21 @@ function views_person_team_carousel ($atts) {
         }
     $params = [
         'post_type'=>'teamperson',
+        'numberposts' => -1,
         'tax_query'=>   [
             [
                 'taxonomy' => 'team',
                 'field'    => 'slug',
                 'terms' => $atts['team']
             ]
-        ]
+        ],
+        'meta_key' => 'Order_order',
+        'orderby'  => 'meta_value_num',
+        'order'   => 'DESC',
     ];
     $views = '<div class="owl-carousel slide-one">';
     $PersonTeam = get_posts($params);
+
     foreach ($PersonTeam as $item) {
         $views.='<div class="item-carousel-shortcode">';
             $views.= '<a  href ='.get_permalink($item->ID).'>'.$item->post_title. get_the_post_thumbnail( $item->ID ).'</a>';

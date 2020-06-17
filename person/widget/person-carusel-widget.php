@@ -81,13 +81,17 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
 
         $params = [
                 'post_type'=>'teamperson',
+                'numberposts' => -1,
                 'tax_query'=>   [
                                     [
                                         'taxonomy' => 'team',
                                         'field'    => 'id',
                                         'terms' => $instance['dep']
                                     ]
-                                ]
+                                ],
+                'meta_key' => 'Order_order',
+                'orderby'  => 'meta_value_num',
+                'order'   => 'DESC',
                 ];
         $PersonTeam = get_posts($params);
         
