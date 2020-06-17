@@ -75,7 +75,7 @@ return array(
                 'placeholder'   =>  'Priority',
                 'desc'			=>	'Сортировка',
                 'type'			=>	'number',
-                'std'           =>  '1',
+                'std'           =>  1,
                 'cap'			=>	'edit_posts'
             )
         )
