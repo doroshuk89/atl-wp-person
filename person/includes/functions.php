@@ -39,6 +39,53 @@ function teamperson()
 
 }
 
+//add new colums for custom type post "teamperson"
+add_filter( 'manage_teamperson_posts_columns', function ( $columns ) {
+	$my_columns = [
+		'id'    => 'ID',
+		'thumb' => 'Миниатюра'
+	];
+        $sort = ['sort'  => 'Сортировка'];
+    return array_slice( $columns, 0, 1 ) +$my_columns + array_slice( $columns, 1, 2 ) +$sort + array_slice( $columns, 3 );
+} );
+// Выводим контент для каждой из зарегистрированных нами колонок. Обязательно.
+add_action( 'manage_teamperson_posts_custom_column', function ( $column_name ) {
+	if ( $column_name === 'id' ) {
+		the_ID();
+	}
+
+	if ( $column_name === 'thumb' && has_post_thumbnail() ) {?>
+		<a href="<?php echo get_edit_post_link(); ?>">
+			<?php the_post_thumbnail( 'thumbnail' ); ?>
+		</a>
+		<?php
+	}
+        if ($column_name == 'sort' && get_post_meta(get_the_ID(),'Order_order', true  )) {
+            echo get_post_meta(get_the_ID(),'Order_order', true  );
+        }
+} );
+
+// добавляем возможность сортировать колонку
+add_filter( 'manage_'.'edit-teamperson'.'_sortable_columns', 'add_views_sortable_column' );
+function add_views_sortable_column( $sortable_columns ){
+	$sortable_columns['sort'] = [ 'Order_order', true ]; 
+            // false = asc (по умолчанию)
+            // true  = desc
+	return $sortable_columns;
+}
+add_action( 'pre_get_posts', 'my_person_orderby' );
+function my_person_orderby( $query ) {
+        if( ! is_admin() )
+        return;
+
+        $orderby = $query->get( 'orderby');
+        if( 'Order_order' == $orderby ) {
+                $query->set('meta_key','Order_order');
+                $query->set('orderby','meta_value_num');
+        }
+
+}
+
 // Создаем новую таксономию для teampearson
 add_action( 'init', 'create_team_taxonomies', 0 );
 
@@ -78,7 +125,7 @@ function person_register_styles () {
             wp_enqueue_style('person', ANBLOG_TEST_URL.'assets/css/person.css' ,array(),null);
         }
 }
-/*delete inpit website from commetns form*/
+/*delete input website from commetns form*/
 add_filter( 'comment_form_default_fields', 'comment_form_default_add_my_fields' );
 function comment_form_default_add_my_fields( $fields ) {
         unset( $fields['url'] );
