@@ -163,7 +163,7 @@ function views_person_team_carousel ($atts) {
     }
     $atts = shortcode_atts( array(
         'team' => $term,
-        'count_item' => 1,
+        'count_item' => 2,
         'time_autoscroll' => 3000
     ), $atts );
 
