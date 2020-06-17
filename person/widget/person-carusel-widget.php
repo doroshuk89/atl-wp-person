@@ -15,9 +15,14 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
 
     public function form ($instance) {
 
+        if(is_admin()){
+            wp_enqueue_script('widget-checked',     ANBLOG_TEST_URL. 'assets/js/atl-wp-widget-checked.js', array('jquery'), null, true);
+        }
+
         $title = isset($instance['title'])?$instance['title']:'PersonTeam';
         $time_autoscroll = isset($instance['time_autoscroll']) ? $instance['time_autoscroll']:'1000';
         ?>
+        <div class="form-widget-person">
         <p>
             <label for = "<?php echo $this->get_field_id('title');?>">Заголовок</label>
             <input class="widefat title" id="<?php echo $this->get_field_id('title');?>" name="<?php echo $this->get_field_name('title');?>" value="<?php echo $title;?>">
@@ -52,6 +57,12 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
                     }
             ?>
         </p>
+        <p>
+            <button type="button" id="btn_on">Отметить все</button>
+            <button type="button" id="btn_off">Снять все</button>
+        </p>
+        </div>
+
     <?php
     }
 
