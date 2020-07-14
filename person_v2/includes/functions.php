@@ -80,6 +80,7 @@ function my_person_orderby( $query ) {
                 $query->set('orderby','meta_value_num');
         }
 }
+
 // Создаем новую таксономию для teampearson
 add_action( 'init', 'create_team_taxonomies', 0 );
 function create_team_taxonomies(){
@@ -139,7 +140,68 @@ function person_register_styles () {
             wp_enqueue_style('person');
         }
 }
-/*delete input website from commetns form*/
+
+/*create metabox address, email, phone for teamperson type post*/
+add_action( 'admin_menu', 'create_meta_boxes' );
+function create_meta_boxes () {
+    add_meta_box ('Custom_data','Контактные данные','create_meta_boxes_data','teamperson', 'normal', 'high');
+}
+add_action('save_post', 'save_custom_post_data');
+
+function create_meta_boxes_data ($post) {
+    wp_nonce_field( basename(__FILE__), 'custom_meta_box_nonce', false, true );
+    $prefix = 'Custom_data_';
+    $value = get_post_meta($post->ID, 'Address' , true);?>
+   <table class="form-table">
+       <tbody>
+        <tr>
+            <th scope="row"><label for="<?php echo $prefix;?>address">Адрес</label></th>
+                <td>
+                    <input name="<?php echo $prefix;?>address" type="text" id="<?php echo $prefix;?>address" value="<?php echo get_post_meta($post->ID, 'Address', true);?>" placeholder="Адрес" class="regular-text"/><br/>
+                    <span class="description">Адрес участика команды</span>
+                </td>
+        </tr>
+        <tr>
+            <th scope="row"><label for="<?php echo $prefix;?>phone">Телефон</label></th>
+                <td>
+                    <input name="<?php echo $prefix;?>phone" type="text" id="<?php echo $prefix;?>phone" value="<?php echo get_post_meta($post->ID, 'Phone', true);?>" placeholder="Номер телефона" class="regular-text"/><br/>
+                    <span class="description">Номер телефонаучастика команды</span>
+                </td>
+        </tr>
+        <tr>
+            <th scope="row"><label for="<?php echo $prefix;?>email">Email</label></th>
+                <td>
+                    <input name="<?php echo $prefix;?>email" type="text" id="<?php echo $prefix;?>email" value="<?php echo get_post_meta($post->ID, 'Email', true);?>" placeholder="Email адрес" class="regular-text"/><br/>
+                    <span class="description">Email адрес участика команды</span>
+                </td>
+        </tr>
+       </tbody>
+   </table>
+   <?php 
+}
+
+function save_custom_post_data ($post_id) {
+    // проверяем, пришёл ли запрос со страницы с метабоксом
+    if ( !isset( $_POST['custom_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['custom_meta_box_nonce'], basename( __FILE__ ) ) )
+        return $post_id;
+    // проверяем, является ли запрос автосохранением
+    if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
+	return $post_id;
+    // проверяем, права пользователя, может ли он редактировать записи
+    if ( !current_user_can( 'edit_post', $post_id ) )
+	return $post_id;
+	// теперь также проверим тип записи	
+	$post = get_post($post_id);
+	if ($post->post_type == 'teamperson') { // укажите собственный
+            $prefix = 'Custom_data_';
+		update_post_meta($post_id, 'Address', $_POST[$prefix.'address']);
+		update_post_meta($post_id, 'Phone',   $_POST[$prefix.'phone']);
+                update_post_meta($post_id, 'Email',   $_POST[$prefix.'email']);
+	}
+	return $post_id;
+}
+
+/*delete input website from comments form*/
 add_filter( 'comment_form_default_fields', 'comment_form_default_add_my_fields' );
 function comment_form_default_add_my_fields( $fields ) {
         unset( $fields['url'] );

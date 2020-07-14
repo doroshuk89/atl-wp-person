@@ -13,12 +13,12 @@ define('ANBLOG_TEST_URL', plugin_dir_url(__FILE__));      //путь к корн
 /*file functions*/
 require_once __DIR__ . '/includes/functions.php';
 /*Add metadata Phone, Address, Email*/
-require_once __DIR__.'/classes/CreateMetabox.php';
-    $options = require_once __DIR__.'/config/metabox.php';
-        foreach ($options as $option)
-            {
-                new CreateMetabox($option);
-            }
+//require_once __DIR__.'/classes/CreateMetabox.php';
+//    $options = require_once __DIR__.'/config/metabox.php';
+//        foreach ($options as $option)
+//            {
+//                new CreateMetabox($option);
+//            }
             
 /*Create template for custom post type*/
 add_filter( 'template_include', 'include_template_function', 1 );

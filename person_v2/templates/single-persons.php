@@ -21,7 +21,7 @@
                                                         <span>Адрес:</span>
                                                         <span class="right">
                                                             <?php
-                                                            if ($address = get_post_meta(get_the_ID(),'Address_address', true  )){
+                                                            if ($address = get_post_meta(get_the_ID(),'Address', true  )){
                                                                 echo $address;
                                                             }else
                                                                 echo '-----';
@@ -31,7 +31,7 @@
                                                     <li >
                                                         <span>E-mail:</span>
                                                         <span class="right">
-                                                            <?php if($email = get_post_meta(get_the_ID(),'Email_email', true  )) {
+                                                            <?php if($email = get_post_meta(get_the_ID(),'Email', true  )) {
                                                                 echo $email;
                                                             }else
                                                                 echo '-----';
@@ -41,7 +41,7 @@
                                                     <li>
                                                         <span>Телефон:</span>
                                                         <span class="right">
-                                                            <?php if ($phone = get_post_meta(get_the_ID(),'Phone_phone', true  )){
+                                                            <?php if ($phone = get_post_meta(get_the_ID(),'Phone', true  )){
                                                                 echo $phone;
                                                             }else
                                                                 echo '-----';
