@@ -59,25 +59,4 @@ return array(
             )
         )
     ),
-
-    // метабокс для sort (сортировки)
-    array(
-        'id'	=>	'Order',
-        'name'	=>	'Сортировка',
-        'post'	=>	array('teamperson'), // не только для постов, но и для страниц
-        'pos'	=>	'side',
-        'pri'	=>	'default',
-        'cap'	=>	'edit_posts',
-        'args'	=>	array(
-            array(
-                'id'			=>	'order',
-                'title'			=>	'Order',
-                'placeholder'   =>  'Priority',
-                'desc'			=>	'Сортировка',
-                'type'			=>	'number',
-                'std'           =>  1,
-                'cap'			=>	'edit_posts'
-            )
-        )
-    ),
 );

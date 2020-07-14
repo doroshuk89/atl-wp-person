@@ -1,5 +1,4 @@
 <?php
-
 /*Добаляем произвольный тип записи teamperson*/
 add_action('init', 'teamperson');
 function teamperson()
@@ -28,11 +27,11 @@ function teamperson()
         'query_var' => false,
         'rewrite' => array('slug' =>'person', 'with_front' => false ),
         'capability_type' => 'post',
-        'has_archive' => true,
+        'has_archive' => false,
         'hierarchical' => false,
         'menu_icon' => ANBLOG_TEST_URL .'assets/img/plugins-icon.png', // иконка в меню
         'menu_position' => 40, //позиция в меню
-        'supports' => array('title','editor','thumbnail', 'comments'),
+        'supports' => array('title','editor','thumbnail', 'comments', 'page-attributes'),
         'taxonomies' => array('team')
     );
     register_post_type('teamperson', $args);
@@ -50,45 +49,39 @@ add_filter( 'manage_teamperson_posts_columns', function ( $columns ) {
 } );
 // Выводим контент для каждой из зарегистрированных нами колонок. Обязательно.
 add_action( 'manage_teamperson_posts_custom_column', function ( $column_name ) {
+    global $post;
 	if ( $column_name === 'id' ) {
 		the_ID();
 	}
-
 	if ( $column_name === 'thumb' && has_post_thumbnail() ) {?>
 		<a href="<?php echo get_edit_post_link(); ?>">
 			<?php the_post_thumbnail( 'thumbnail' ); ?>
 		</a>
 		<?php
 	}
-        if ($column_name == 'sort' && get_post_meta(get_the_ID(),'Order_order', true  )) {
-            echo get_post_meta(get_the_ID(),'Order_order', true  );
-        }
-} );
-
+	if ($column_name == 'sort') {
+	    echo $post->menu_order;
+	}
+});
 // добавляем возможность сортировать колонку
-add_filter( 'manage_'.'edit-teamperson'.'_sortable_columns', 'add_views_sortable_column' );
+add_filter('manage_'.'edit-teamperson'.'_sortable_columns', 'add_views_sortable_column');
 function add_views_sortable_column( $sortable_columns ){
-	$sortable_columns['sort'] = [ 'Order_order', true ]; 
+	$sortable_columns['sort'] = [ 'menu_order', true ];
             // false = asc (по умолчанию)
             // true  = desc
 	return $sortable_columns;
 }
 add_action( 'pre_get_posts', 'my_person_orderby' );
 function my_person_orderby( $query ) {
-        if( ! is_admin() )
-        return;
-
+        if( ! is_admin() ) return;
         $orderby = $query->get( 'orderby');
         if( 'Order_order' == $orderby ) {
                 $query->set('meta_key','Order_order');
                 $query->set('orderby','meta_value_num');
         }
-
 }
-
 // Создаем новую таксономию для teampearson
 add_action( 'init', 'create_team_taxonomies', 0 );
-
 function create_team_taxonomies(){
     $labels = array(
         'name' => 'Отделы',
@@ -102,9 +95,7 @@ function create_team_taxonomies(){
         'update_item' =>'Обновить отделы',
         'add_new_item' =>'Добавить новый отдел',
         'new_item_name' => 'Название нового отдела команды',
-
     );
-
     register_taxonomy('team', array('teamperson'),
         array(
             'labels' => $labels,
@@ -124,6 +115,7 @@ function register_my_scripts () {
     wp_register_script('owl-carusel-js', ANBLOG_TEST_URL . 'assets/js/owl.carousel.min.js', array('jquery'), null, true);
     wp_register_script('atl-wp-carusel',     ANBLOG_TEST_URL. 'assets/js/atl-wp-carusel.js', array('jquery'), null, true);
 }
+/*Styles for Widget Admin panel*/
 add_action('admin_enqueue_scripts', 'register_my_scripts_admin');
 function register_my_scripts_admin () {
     wp_register_script('widget-checked',     ANBLOG_TEST_URL. 'assets/js/atl-wp-widget-checked.js', array('jquery'), null, true);
@@ -199,11 +191,6 @@ function views_person_team_carousel ($atts) {
         'time_autoscroll' => (intval($atts['time_autoscroll'])),
         'count_item' => (intval($atts['count_item'])),
     ));
-
-
-
-
-
     $params = [
         'post_type'=>'teamperson',
         'numberposts' => -1,
@@ -214,8 +201,7 @@ function views_person_team_carousel ($atts) {
                 'terms' => $atts['team']
             ]
         ],
-        'meta_key' => 'Order_order',
-        'orderby'  => 'meta_value_num',
+        'orderby'  => 'menu_order',
         'order'   => 'DESC',
     ];
     $views = '<div class="owl-carousel slide-one">';

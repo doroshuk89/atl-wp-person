@@ -86,8 +86,7 @@ class ATL_PERSON_CARUSEL extends WP_Widget {
                                         'terms' => $instance['dep']
                                     ]
                                 ],
-                'meta_key' => 'Order_order',
-                'orderby'  => 'meta_value_num',
+                'orderby'  => 'menu_order',
                 'order'   => 'DESC',
                 ];
         $PersonTeam = get_posts($params);
