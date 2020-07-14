@@ -16,7 +16,7 @@ services:
     volumes:
       - ./dsp/:/var/www/html/wp-content/plugins/atl-dsp/
       - wordpress:/var/www/html
-      - ./person/:/var/www/html/wp-content/plugins/person/
+      - ./person_v2/:/var/www/html/wp-content/plugins/person/
     depends_on:
         - db
     networks:

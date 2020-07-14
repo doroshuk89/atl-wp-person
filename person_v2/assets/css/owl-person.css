@@ -1,0 +1,31 @@
+.item-carousel {
+    height: 360px;
+    width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+    text-align: center;
+}
+.item-carousel img {
+    height: 300px;
+    width: 100%;
+    object-fit: contain;
+}
+.item-carousel-shortcode {
+    text-align: center;
+    overflow: hidden;
+}
+.owl-stage {
+    display: flex;
+    align-items: center;
+}
+@media  (max-width: 769px) {
+    .item-carousel-shortcode {
+        height: 360px;
+        margin: 0 auto;
+        width: 80%;
+    }
+    .item-carousel-shortcode img {
+        height: 100%;
+        object-fit: contain;
+    }
+}
