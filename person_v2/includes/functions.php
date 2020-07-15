@@ -71,15 +71,6 @@ function add_views_sortable_column( $sortable_columns ){
             // true  = desc
 	return $sortable_columns;
 }
-add_action( 'pre_get_posts', 'my_person_orderby' );
-function my_person_orderby( $query ) {
-        if( ! is_admin() ) return;
-        $orderby = $query->get( 'orderby');
-        if( 'Order_order' == $orderby ) {
-                $query->set('meta_key','Order_order');
-                $query->set('orderby','meta_value_num');
-        }
-}
 
 // Создаем новую таксономию для teampearson
 add_action( 'init', 'create_team_taxonomies', 0 );
@@ -146,12 +137,11 @@ add_action( 'admin_menu', 'create_meta_boxes' );
 function create_meta_boxes () {
     add_meta_box ('Custom_data','Контактные данные','create_meta_boxes_data','teamperson', 'normal', 'high');
 }
-add_action('save_post', 'save_custom_post_data');
+add_action('save_post_teamperson', 'save_custom_post_data');
 
 function create_meta_boxes_data ($post) {
-    wp_nonce_field( basename(__FILE__), 'custom_meta_box_nonce', false, true );
-    $prefix = 'Custom_data_';
-    $value = get_post_meta($post->ID, 'Address' , true);?>
+    wp_nonce_field( ANBLOG_TEST_DIR, 'custom_meta_box_nonce', true, true );
+    $prefix = 'Custom_data_'; ?>
    <table class="form-table">
        <tbody>
         <tr>
@@ -182,7 +172,7 @@ function create_meta_boxes_data ($post) {
 
 function save_custom_post_data ($post_id) {
     // проверяем, пришёл ли запрос со страницы с метабоксом
-    if ( !isset( $_POST['custom_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['custom_meta_box_nonce'], basename( __FILE__ ) ) )
+    if ( !isset( $_POST['custom_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['custom_meta_box_nonce'], ANBLOG_TEST_DIR ) )
         return $post_id;
     // проверяем, является ли запрос автосохранением
     if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
@@ -193,27 +183,21 @@ function save_custom_post_data ($post_id) {
 	// теперь также проверим тип записи	
 	$post = get_post($post_id);
 	if ($post->post_type == 'teamperson') { // укажите собственный
-            $prefix = 'Custom_data_';
-		update_post_meta($post_id, 'Address', $_POST[$prefix.'address']);
-		update_post_meta($post_id, 'Phone',   $_POST[$prefix.'phone']);
-                update_post_meta($post_id, 'Email',   $_POST[$prefix.'email']);
+	    $prefix = 'Custom_data_';
+            update_post_meta($post_id, 'Address', $_POST[$prefix.'address']);
+            update_post_meta($post_id, 'Phone',   $_POST[$prefix.'phone']);
+            update_post_meta($post_id, 'Email',   $_POST[$prefix.'email']);
 	}
 	return $post_id;
 }
 
-/*delete input website from comments form*/
-add_filter( 'comment_form_default_fields', 'comment_form_default_add_my_fields' );
-function comment_form_default_add_my_fields( $fields ) {
-        unset( $fields['url'] );
-    return $fields;
-}
-// apply_filters( 'get_comment_link', $link, $comment, $args, $cpage );
+//Redirect in first page for pagination comments
 add_filter( 'get_comment_link', 'change_redirect_link', 10, 4 );
 function change_redirect_link( $link, $comment, $args, $cpage ){
     if( false !== strpos($_SERVER['REQUEST_URI'], 'wp-comments-post.php') ){
         // изменяем номер страницы комментариев
-        $link = str_replace( "comment-page-$cpage", "comment-page-1", $link );
-    }
+            $link = str_replace( "comment-page-$cpage", "comment-page-1", $link);
+        }
     return $link;
 }
 

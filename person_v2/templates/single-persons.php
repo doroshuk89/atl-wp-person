@@ -68,28 +68,36 @@
                         if ( comments_open() || get_comments_number() ) :
                                       comment_form();
                                     // Получаем комментарии поста из базы данных
+                            echo '<ul class="commentlist">' . wp_list_comments( array( 'echo' => false ) ) . '</ul>';
                               $comments = get_comments(array(
                                         'post_id' => get_the_ID(),
                                         'status' => 'approve' // комментарии прошедшие модерацию
                                     ));
+
                                     // Формируем вывод списка полученных комментариев
                                     wp_list_comments(array(
                                         'per_page' => $max_comment_page, // Пагинация комментариев - по 10 на страницу
-                                        'reverse_top_level' => false // Показываем последние комментарии в начале
+                                        'reverse_top_level' => false, // Показываем последние комментарии в начале
                                     ), $comments);
                                 endif;?>
                         <hr>
 
                             <?php
-                                    $max_comment =get_comments(array('post_id' => get_the_ID(), 'count' => true)); // возвращает только count
-                                            if (!$max_comment % $max_comment_page  > 0) {
-                                                $max_page = ($max_comment / $max_comment_page)+1;
-                                            }else {
+                                    $max_comment =get_comments(array(
+                                            'post_id' => get_the_ID(),
+                                            'status' => 'approve',
+                                            'count' => true,
+                                            'hierarchical' => threaded,
+                                        )); // возвращает только count
+                                            if($max_comment % $max_comment_page  > 0) {
+                                                $max_page = intval(($max_comment / $max_comment_page))+1;
+
+                                            }elseif ($max_comment % $max_comment_page  == 0) {
                                                 $max_page = ($max_comment / $max_comment_page);
                                             }
                                             the_comments_pagination(
                                                                         array(
-                                                                                'total'   => $max_page,
+	                                                                            'total'   => $max_page,
                                                                                 )
                                                                     );
                             ?>

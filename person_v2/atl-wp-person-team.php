@@ -9,17 +9,8 @@ Author URI: http://atlas-it.by
 */
 define('ANBLOG_TEST_DIR', plugin_dir_path(__FILE__));     //полный путь к корню папки плагина (от сервера)
 define('ANBLOG_TEST_URL', plugin_dir_url(__FILE__));      //путь к корню папки плагина (лучше его использовать)
-
 /*file functions*/
 require_once __DIR__ . '/includes/functions.php';
-/*Add metadata Phone, Address, Email*/
-//require_once __DIR__.'/classes/CreateMetabox.php';
-//    $options = require_once __DIR__.'/config/metabox.php';
-//        foreach ($options as $option)
-//            {
-//                new CreateMetabox($option);
-//            }
-            
 /*Create template for custom post type*/
 add_filter( 'template_include', 'include_template_function', 1 );
 function include_template_function( $template_path ) {
@@ -34,7 +25,6 @@ function include_template_function( $template_path ) {
     }
     return $template_path;
 }
-
 /*register widget*/
 require_once ANBLOG_TEST_DIR.'widget/person-carusel-widget.php';
 add_action('widgets_init', 'atl_wp_person_widget');
